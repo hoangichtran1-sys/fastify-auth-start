@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { type FastifySchema } from "fastify";
-import { ApiResponseSchema } from "@/utils/api-response";
 import { responseProperty } from "@/constants";
 
 export const registerSchema = z.object({

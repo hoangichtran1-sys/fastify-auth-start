@@ -1,4 +1,5 @@
 import type { FastifyInstance } from "fastify";
+import { loginRateLimiter, registerRateLimiter } from "@/configs/rate-limit";
 import {
     getCurrent,
     login,
@@ -16,10 +17,28 @@ import {
 
 export const authRouters = async (fastify: FastifyInstance) => {
     // POST /register
-    fastify.post("/register", { schema: RegisterSchema }, register);
+    fastify.post(
+        "/register",
+        {
+            schema: RegisterSchema,
+            config: {
+                rateLimit: registerRateLimiter,
+            },
+        },
+        register,
+    );
 
     // POST /login
-    fastify.post("/login", { schema: LoginSchema }, login);
+    fastify.post(
+        "/login",
+        {
+            schema: LoginSchema,
+            config: {
+                rateLimit: loginRateLimiter,
+            },
+        },
+        login,
+    );
 
     // POST /logout
     fastify.post(

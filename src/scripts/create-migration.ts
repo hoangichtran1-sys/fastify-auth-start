@@ -10,7 +10,7 @@ const migrationName = process.argv[2];
 
 if (!migrationName) {
     console.error("❌ Vui lòng nhập tên migration!");
-    console.log("Ví dụ: node scripts/create-migration.js create_users_table");
+    console.log("Ví dụ: tsx scripts/create-migration.js create_users_table");
     process.exit(1);
 }
 
@@ -26,27 +26,26 @@ const timestamp = [
     pad(now.getSeconds()),
 ].join("");
 
-// 2. Định dạng tên file chuẩn
+// 2. Định dạng tên file
 const sanitizedName = migrationName.toLowerCase().replace(/[^a-z0-9_]/g, "_");
 const fileName = `${timestamp}_${sanitizedName}.ts`;
 
-// Đường dẫn lưu file migration (trỏ tới thư mục src/migrations hoặc migrations)
+// Đường dẫn lưu file migration
 const targetDir = path.join(__dirname, "../migrations");
 const filePath = path.join(targetDir, fileName);
 
 // 3. Nội dung mẫu cho file migration Kysely
-const template = `import { Kysely, sql } from 'kysely'
+const template = `import { Kysely, sql } from "kysely"
 
 export async function up(db: Kysely<any>): Promise<void> {
-  // Viết logic nâng cấp DB ở đây
+   // Migration up
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  // Viết logic hạ cấp DB ở đây
+  // Migration down
 }
 `;
 
-// 4. Ghi file
 try {
     await fs.mkdir(targetDir, { recursive: true });
     await fs.writeFile(filePath, template, "utf8");
